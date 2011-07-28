@@ -58,6 +58,7 @@ class TestISO8601(unittest.TestCase):
     
     def test_parse_date_tz(self):
         d = iso8601.parse_date("2006-10-20T15:34:56.123+02:30")
+        
         assert d.year == 2006
         assert d.month == 10
         assert d.day == 20
@@ -69,6 +70,88 @@ class TestISO8601(unittest.TestCase):
         offset = d.tzinfo.utcoffset(None)
         assert offset.days == 0
         assert offset.seconds == 60 * 60 * 2.5
+
+    def test_parse_date_tz(self):
+        d = iso8601.parse_date("2006-10-20T15:34:56.123+02:30")
+        assert d.year == 2006
+        assert d.month == 10
+        assert d.day == 20
+        assert d.hour == 15
+        assert d.minute == 34
+        assert d.second == 56
+        assert d.microsecond == 123000
+        assert d.tzinfo.tzname(None) == "+02:30"
+        offset = d.tzinfo.utcoffset(None)
+        assert offset.days == 0
+        assert offset.seconds == 60 * 60 * 2.5
+
+    def test_parse_date_negtz(self):
+        d = iso8601.parse_date("2006-10-20T15:34:56.123-02:30")
+        assert d.year == 2006
+        assert d.month == 10
+        assert d.day == 20
+        assert d.hour == 15
+        assert d.minute == 34
+        assert d.second == 56
+        assert d.microsecond == 123000
+        assert d.tzinfo.tzname(None) == "-02:30"
+        offset = d.tzinfo.utcoffset(None)
+        assert offset.days == -1
+        assert offset.seconds == 86400 - 60 * 60 * 2.5
+
+    def test_parse_date_2d_tz(self):
+        d = iso8601.parse_date("2010-07-01 00:01:20+07")
+        assert d.year == 2010
+        assert d.month == 7
+        assert d.day == 1
+        assert d.hour == 0
+        assert d.minute == 1
+        assert d.second == 20
+        assert d.tzinfo.tzname(None) == "+07"
+        offset = d.tzinfo.utcoffset(None)
+        assert offset.days == 0
+        assert offset.seconds == 60 * 60 * 7
+        
+    def test_parse_date_2d_negtz(self):
+        d = iso8601.parse_date("2010-07-01 00:01:20-07")
+        assert d.year == 2010
+        assert d.month == 7
+        assert d.day == 1
+        assert d.hour == 0
+        assert d.minute == 1
+        assert d.second == 20
+        assert d.tzinfo.tzname(None) == "-07"
+        offset = d.tzinfo.utcoffset(None)
+        assert offset.days == -1
+        assert offset.seconds == 86400 - 60 * 60 * 7
+
+    def test_parse_date_2d_ms_tz(self):
+        d = iso8601.parse_date("2011-07-27 21:05:12.843248+07")
+        assert d.year == 2011
+        assert d.month == 7
+        assert d.day == 27
+        assert d.hour == 21
+        assert d.minute == 5
+        assert d.second == 12
+        assert d.microsecond == 843248
+        assert d.tzinfo.tzname(None) == "+07"
+        offset = d.tzinfo.utcoffset(None)
+        assert offset.days == 0
+        assert offset.seconds == 60 * 60 * 7
+
+    def test_parse_date_2d_ms_negtz(self):
+        d = iso8601.parse_date("2011-07-27 21:05:12.843248-07")
+        assert d.year == 2011
+        assert d.month == 7
+        assert d.day == 27
+        assert d.hour == 21
+        assert d.minute == 5
+        assert d.second == 12
+        assert d.microsecond == 843248
+        assert d.tzinfo.tzname(None) == "-07"
+        offset = d.tzinfo.utcoffset(None)
+        assert offset.days == -1
+        assert offset.seconds == 86400 - 60 * 60 * 7
     
     def test_parse_invalid_date(self):
         try:
