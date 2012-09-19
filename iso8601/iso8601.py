@@ -59,6 +59,9 @@ class FixedOffset(tzinfo):
     def __repr__(self):
         return "<FixedOffset %r>" % self.__name
 
+    def __reduce__(self):
+        return (FixedOffset, (0, 0, "UTC"), self.__dict__)
+
 def parse_timezone(tzstring, default_timezone=UTC):
     """Parses ISO 8601 time zone specs into tzinfo offsets
     

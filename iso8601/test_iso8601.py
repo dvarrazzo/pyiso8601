@@ -1,5 +1,10 @@
 import iso8601
 import unittest
+from copy import deepcopy
+try:
+    import cPickle as pickle
+except ImportError:
+    import pickle
 
 class TestISO8601(unittest.TestCase):
     def test_iso8601_regex(self):
@@ -204,6 +209,56 @@ class TestISO8601(unittest.TestCase):
         assert d.second == 34
         assert d.microsecond == 0
         assert d.tzinfo == iso8601.UTC
+
+    def test_deepcopy(self):
+        """
+        issue 20 - dates returned by parse_date do not support deepcopy
+
+        FixedOffset can not be deep copied (raises a TypeError).
+        """
+        d = iso8601.parse_date('2012-06-13 11:06:47+02:00')
+        d_copy = deepcopy(d)
+        assert d is not d_copy
+        assert d == d_copy
+
+    def test_deepcopy(self):
+        """
+        issue 20 - dates returned by parse_date do not support deepcopy
+
+        FixedOffset can not be deep copied (raises a TypeError).
+        """
+        d = iso8601.parse_date('2012-06-13 11:06:47+02:00')
+        d_copy = deepcopy(d)
+        assert d == d_copy
+        assert d is not d_copy
+
+    def test_pickle_utc(self):
+        """Tests (UTC) dates returned by parse_date can be pickled"""
+        d = iso8601.parse_date('2012-09-19T01:54:30')
+        d_pickled = pickle.dumps(d)
+        d_copy = pickle.loads(d_pickled)
+        assert d == d_copy
+
+    def test_binary_pickle_utc(self):
+        """Tests (UTC) dates returned by parse_date can be (binary) pickled"""
+        d = iso8601.parse_date('2012-09-19T01:54:30')
+        d_pickled = pickle.dumps(d, pickle.HIGHEST_PROTOCOL)
+        d_copy = pickle.loads(d_pickled)
+        assert d == d_copy
+
+    def test_pickle_fixed(self):
+        """Tests (FixedOffset) dates returned by parse_date can be pickled"""
+        d = iso8601.parse_date('2012-09-19T11:59:05+10:00')
+        d_pickled = pickle.dumps(d)
+        d_copy = pickle.loads(d_pickled)
+        assert d == d_copy
+
+    def test_binary_pickle_fixed(self):
+        """Tests (FixedOffset) dates returned by parse_date can be (binary) pickled"""
+        d = iso8601.parse_date('2012-09-19T11:59:05+10:00')
+        d_pickled = pickle.dumps(d, pickle.HIGHEST_PROTOCOL)
+        d_copy = pickle.loads(d_pickled)
+        assert d == d_copy
 
 if __name__ == '__main__':
     unittest.main()
