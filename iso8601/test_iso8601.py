@@ -221,17 +221,6 @@ class TestISO8601(unittest.TestCase):
         assert d is not d_copy
         assert d == d_copy
 
-    def test_deepcopy(self):
-        """
-        issue 20 - dates returned by parse_date do not support deepcopy
-
-        FixedOffset can not be deep copied (raises a TypeError).
-        """
-        d = iso8601.parse_date('2012-06-13 11:06:47+02:00')
-        d_copy = deepcopy(d)
-        assert d == d_copy
-        assert d is not d_copy
-
     def test_pickle_utc(self):
         """Tests (UTC) dates returned by parse_date can be pickled"""
         d = iso8601.parse_date('2012-09-19T01:54:30')
