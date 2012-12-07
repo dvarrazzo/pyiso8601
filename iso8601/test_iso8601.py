@@ -159,20 +159,10 @@ class TestISO8601(unittest.TestCase):
         assert offset.seconds == 86400 - 60 * 60 * 7
     
     def test_parse_invalid_date(self):
-        try:
-            iso8601.parse_date(None)
-        except iso8601.ParseError:
-            pass
-        else:
-            assert 1 == 2
+        self.assertRaises(iso8601.ParseError, iso8601.parse_date, None)
     
     def test_parse_invalid_date2(self):
-        try:
-            iso8601.parse_date("23")
-        except iso8601.ParseError:
-            pass
-        else:
-            assert 1 == 2
+        self.assertRaises(iso8601.ParseError, iso8601.parse_date, "23")
     
     def test_parse_no_timezone(self):
         """issue 4 - Handle datetime string without timezone
