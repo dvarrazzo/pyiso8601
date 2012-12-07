@@ -159,20 +159,10 @@ class TestISO8601(unittest.TestCase):
         assert offset.seconds == 86400 - 60 * 60 * 7
     
     def test_parse_invalid_date(self):
-        try:
-            iso8601.parse_date(None)
-        except iso8601.ParseError:
-            pass
-        else:
-            assert 1 == 2
+        self.assertRaises(iso8601.ParseError, iso8601.parse_date, None)
     
     def test_parse_invalid_date2(self):
-        try:
-            iso8601.parse_date("23")
-        except iso8601.ParseError:
-            pass
-        else:
-            assert 1 == 2
+        self.assertRaises(iso8601.ParseError, iso8601.parse_date, "23")
     
     def test_parse_no_timezone(self):
         """issue 4 - Handle datetime string without timezone
@@ -221,17 +211,6 @@ class TestISO8601(unittest.TestCase):
         assert d is not d_copy
         assert d == d_copy
 
-    def test_deepcopy(self):
-        """
-        issue 20 - dates returned by parse_date do not support deepcopy
-
-        FixedOffset can not be deep copied (raises a TypeError).
-        """
-        d = iso8601.parse_date('2012-06-13 11:06:47+02:00')
-        d_copy = deepcopy(d)
-        assert d == d_copy
-        assert d is not d_copy
-
     def test_pickle_utc(self):
         """Tests (UTC) dates returned by parse_date can be pickled"""
         d = iso8601.parse_date('2012-09-19T01:54:30')
@@ -259,6 +238,28 @@ class TestISO8601(unittest.TestCase):
         d_pickled = pickle.dumps(d, pickle.HIGHEST_PROTOCOL)
         d_copy = pickle.loads(d_pickled)
         assert d == d_copy
+
+    def test_date_no_day(self):
+        d = iso8601.parse_date('2012-12')
+        assert d.year == 2012
+        assert d.month == 12
+        assert d.day == 1
+        assert d.hour == 0
+        assert d.minute == 0
+        assert d.second == 0
+        assert d.microsecond == 0
+        assert d.tzinfo == iso8601.UTC
+
+    def test_date_no_month(self):
+        d = iso8601.parse_date('2012')
+        assert d.year == 2012
+        assert d.month == 1
+        assert d.day == 1
+        assert d.hour == 0
+        assert d.minute == 0
+        assert d.second == 0
+        assert d.microsecond == 0
+        assert d.tzinfo == iso8601.UTC
 
 if __name__ == '__main__':
     unittest.main()

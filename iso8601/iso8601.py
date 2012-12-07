@@ -103,6 +103,12 @@ def parse_date(datestring, default_timezone=UTC):
     groups = m.groupdict()
     tz = parse_timezone(groups["timezone"], default_timezone=default_timezone)
 
+    if groups['month'] is None:
+        groups['month'] = '1'
+
+    if groups['day'] is None:
+        groups['day'] = '1'
+
     if groups['hour'] is None: 
         groups['hour'] = '0'
     
