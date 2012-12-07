@@ -239,6 +239,28 @@ class TestISO8601(unittest.TestCase):
         d_copy = pickle.loads(d_pickled)
         assert d == d_copy
 
+    def test_date_no_day(self):
+        d = iso8601.parse_date('2012-12')
+        assert d.year == 2012
+        assert d.month == 12
+        assert d.day == 1
+        assert d.hour == 0
+        assert d.minute == 0
+        assert d.second == 0
+        assert d.microsecond == 0
+        assert d.tzinfo == iso8601.UTC
+
+    def test_date_no_month(self):
+        d = iso8601.parse_date('2012')
+        assert d.year == 2012
+        assert d.month == 1
+        assert d.day == 1
+        assert d.hour == 0
+        assert d.minute == 0
+        assert d.second == 0
+        assert d.microsecond == 0
+        assert d.tzinfo == iso8601.UTC
+
 if __name__ == '__main__':
     unittest.main()
 
