@@ -16,6 +16,13 @@ datetime.datetime(2007, 1, 25, 12, 0, tzinfo=<iso8601.iso8601.Utc ...>)
 Changes
 =======
 
+0.1.5
+-----
+
+* Handle date only strings
+* Fixed dates returned by parse_date not being pickle-able
+* Fixed random number strings being interpreted as dates
+
 0.1.4
 -----
 
@@ -47,7 +54,7 @@ Changes
 
 setup(
     name="iso8601",
-    version="0.1.4",
+    version="0.1.5",
     description=long_description.split("\n")[0],
     long_description=long_description,
     author="Michael Twomey",

@@ -51,7 +51,7 @@ class TestISO8601(unittest.TestCase):
         """From bug 6
         
         """
-        d = iso8601.parse_date("2007-5-7T11:43:55.328Z'")
+        d = iso8601.parse_date("2007-5-7T11:43:55.328Z")
         assert d.year == 2007
         assert d.month == 5
         assert d.day == 7
@@ -163,6 +163,9 @@ class TestISO8601(unittest.TestCase):
     
     def test_parse_invalid_date2(self):
         self.assertRaises(iso8601.ParseError, iso8601.parse_date, "23")
+
+    def test_parse_invalid_date3(self):
+        self.assertRaises(iso8601.ParseError, iso8601.parse_date, "1355054205")
     
     def test_parse_no_timezone(self):
         """issue 4 - Handle datetime string without timezone
