@@ -51,7 +51,7 @@ class TestISO8601(unittest.TestCase):
         """From bug 6
         
         """
-        d = iso8601.parse_date("2007-5-7T11:43:55.328Z'")
+        d = iso8601.parse_date("2007-5-7T11:43:55.328Z")
         assert d.year == 2007
         assert d.month == 5
         assert d.day == 7
