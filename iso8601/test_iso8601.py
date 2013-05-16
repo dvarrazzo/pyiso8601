@@ -189,6 +189,12 @@ class TestISO8601(unittest.TestCase):
         d = iso8601.parse_date("2007-01-01T08:00:00", default_timezone=tz)
         assert d.tzinfo == tz
     
+    def test_parse_utc_different_default(self):
+        """Z should mean 'UTC', not 'default'."""
+        tz = iso8601.FixedOffset(2, 0, "test offset")
+        d = iso8601.parse_date("2007-01-01T08:00:00Z", default_timezone=tz)
+        assert d.tzinfo == iso8601.UTC
+
     def test_space_separator(self):
         """Handle a separator other than T
         
